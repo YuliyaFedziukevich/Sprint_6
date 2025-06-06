@@ -1,7 +1,6 @@
 import allure
 from selenium.webdriver import Keys
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from pages.base_page import BasePage
 from locators.ordering_scooter_locators import (MainScooterLocators, OrderingScooterLocators, AboutRentLocators,
                                                 OrderRegistrationLocators, OrderSuccessfullyPlacedLocators)
 main_scooter_locators = MainScooterLocators()
@@ -11,106 +10,99 @@ order_registration_locators = OrderRegistrationLocators()
 order_successfully_placed_locators = OrderSuccessfullyPlacedLocators()
 
 
-class OrderingScooter:
+class OrderingScooter(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver)
 
     @allure.step('Нажать кнопку "Заказать" вверху главной страницы')
-    def click_button_order_on_top(self, driver):
+    def click_button_order_on_top(self):
 
-        # Подождать, пока кнопка "Заказать" станет кликабельна
-        wait = WebDriverWait(driver, 3)
-        button_order = wait.until(expected_conditions.element_to_be_clickable(main_scooter_locators.button_order_on_top))
+        # Подождать, пока кнопка "Заказать" станет кликабельна, нажать кнопку "Заказать
+        self.wait_clickable_and_click(main_scooter_locators.button_order_on_top)
 
-        # Нажать кнопку "Заказать
-        button_order.click()
 
 
     @allure.step('Нажать кнопку "Заказать" внизу главной страницы')
-    def click_button_order_below(self, driver):
+    def click_button_order_below(self):
 
         #  Перейти к кнопке "Заказать" внизу (с использованием прокрутки)
-        element = driver.find_element(*main_scooter_locators.button_order_below)
-        driver.execute_script('arguments[0].scrollIntoView();', element)
+        button_below = main_scooter_locators.button_order_below
+        self.scroll(button_below)
 
-        # Подождать, пока кнопка "Заказать" станет кликабельна
-        wait = WebDriverWait(driver, 10)
-        # Нажать кнопку "Заказать"
-        wait.until(expected_conditions.element_to_be_clickable(element)).click()
+        # Подождать, пока кнопка "Заказать" станет кликабельна, нажать кнопку "Заказать"
+        self.wait_clickable_and_click(button_below)
+
 
 
     @allure.step('Заполнение полей для заказа на странице "Для кого самокат"')
-    def filling_order_fields_who_is_scooter_for(self, driver, user_data):
+    def filling_order_fields_who_is_scooter_for(self, user_data):
 
         # Подождать, пока кнопка "Далее" станет кликабельна
-        wait = WebDriverWait(driver, 3)
-        button_next_view = wait.until(expected_conditions.element_to_be_clickable(ordering_scooter_locators.button_next))
+        button_next_view = ordering_scooter_locators.button_next
+        self.wait_clickable(button_next_view)
 
         # Заполнить форму заказа
-
         # Заполнить поле "Имя"
-        driver.find_element(*ordering_scooter_locators.first_name_order).send_keys(user_data.first_name)
+        self.send_keys(ordering_scooter_locators.first_name_order, user_data.first_name)
 
         # Заполнить поле "Фамилия"
-        driver.find_element(*ordering_scooter_locators.last_name_order).send_keys(user_data.last_name)
+        self.send_keys(ordering_scooter_locators.last_name_order, user_data.last_name)
 
         # Заполнить поле "Адрес"
-        driver.find_element(*ordering_scooter_locators.address_order).send_keys(user_data.address)
+        self.send_keys(ordering_scooter_locators.address_order, user_data.address)
 
         # Нажать на поле "Станция метро"
-        driver.find_element(*ordering_scooter_locators.metro_station_order).click()
+        self.click(ordering_scooter_locators.metro_station_order)
 
         # Выбрать станцию метро
-        metro_option = wait.until(expected_conditions.element_to_be_clickable(user_data.metro_station_locator))
-        metro_option.click()
+        self.wait_clickable_and_click(user_data.metro_station_locator)
 
         # Заполнить поле "Телефон"
-        driver.find_element(*ordering_scooter_locators.phone_order).send_keys(user_data.phone)
+        self.send_keys(ordering_scooter_locators.phone_order, user_data.phone)
 
         # Нажать кнопку "Далее"
-        button_next_view.click()
+        self.click(button_next_view)
 
 
     @allure.step('Заполнение полей для заказа на странице "Про аренду"')
-    def filling_order_fields_about_rent(self, driver, user_data):
+    def filling_order_fields_about_rent(self, user_data):
 
         # Подождать, пока кнопка "Заказать" станет кликабельна
-        wait = WebDriverWait(driver, 3)
-        button_next_view = wait.until(expected_conditions.element_to_be_clickable(about_rent_locators.button_rent_order))
+        button_order_view = about_rent_locators.button_rent_order
+        self.wait_clickable(button_order_view)
 
         # Заполнить форму "Для кого самокат"
-
         # Заполнить поле "Когда привезти самокат"
-        calendar = driver.find_element(*about_rent_locators.when_to_deliver_order)
-        calendar.click()
-        calendar.send_keys(user_data.when_to_deliver)
-        calendar.send_keys(Keys.ENTER)
+        calendar = about_rent_locators.when_to_deliver_order
+        self.wait_clickable_and_click(calendar)
+        self.send_keys(calendar, user_data.when_to_deliver)
+        self.send_keys(calendar, Keys.ENTER)
 
         # Заполнить поле "Срок аренды"
-        driver.find_element(*about_rent_locators.rental_period_order).click()
-        rent = wait.until(expected_conditions.element_to_be_clickable(user_data.rental_period_locator))
-        rent.click()
+        self.wait_clickable_and_click(about_rent_locators.rental_period_order)
+        self.wait_clickable_and_click(user_data.rental_period_locator)
 
         # Заполнить поле "Цвет самоката"
-        driver.find_element(*user_data.color_scooter_locator).click()
+        self.click(user_data.color_scooter_locator)
 
         # Заполнить поле "Комментарий для курьера"
-        driver.find_element(*about_rent_locators.comment_order).send_keys(user_data.comment)
+        self.send_keys(about_rent_locators.comment_order, user_data.comment)
 
         # Нажать кнопку "Заказать"
-        button_next_view.click()
+        self.click(button_order_view)
 
 
     @allure.step('Выбор варианта "Да" на странице "Хотите оформить заказ"')
-    def select_yes_while_place_an_order(self, driver):
+    def select_yes_while_place_an_order(self):
 
         # Кликнуть вариант "Да" на странице "Хотите оформить заказ"
-        wait = WebDriverWait(driver, 3)
-        button_yes = wait.until(expected_conditions.element_to_be_clickable(order_registration_locators.button_yes_order))
-        button_yes.click()
+        self.wait_clickable_and_click(order_registration_locators.button_yes_order)
+
 
 
     @allure.step('Шаг по заполнению полей на страницах "Для кого самокат", "Про аренду", "Хотите оформить заказ"')
-    def filling_order_fields(self, driver, user_data):
-        self.filling_order_fields_who_is_scooter_for(driver, user_data)
-        self.filling_order_fields_about_rent(driver, user_data)
-        self.select_yes_while_place_an_order(driver)
-
+    def filling_order_fields(self, user_data):
+        self.filling_order_fields_who_is_scooter_for(user_data)
+        self.filling_order_fields_about_rent(user_data)
+        self.select_yes_while_place_an_order()

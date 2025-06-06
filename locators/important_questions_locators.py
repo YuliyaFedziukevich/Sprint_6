@@ -30,28 +30,29 @@ class ImportantQuestionLocators:
     # Список локаторов для вопросов
     question_locators =[question_1_locator, question_2_locator, question_3_locator, question_4_locator, question_5_locator,
                         question_6_locator, question_7_locator, question_8_locator]
-    # Ответ  на вопрос 1.
+
+    # Ответ на вопрос 1.
     answer_1_locator = (By.ID, 'accordion__panel-0')
 
-    # Ответ  на вопрос 2.
+    # Ответ на вопрос 2.
     answer_2_locator = (By.ID, 'accordion__panel-1')
 
-    # Ответ  на вопрос 3.
+    # Ответ на вопрос 3.
     answer_3_locator = (By.ID, 'accordion__panel-2')
 
-    # Ответ  на вопрос 4.
+    # Ответ на вопрос 4.
     answer_4_locator = (By.ID, 'accordion__panel-3')
 
-    # Ответ  на вопрос 5.
+    # Ответ на вопрос 5.
     answer_5_locator = (By.ID, 'accordion__panel-4')
 
-    # Ответ  на вопрос 6.
+    # Ответ на вопрос 6.
     answer_6_locator = (By.ID, 'accordion__panel-5')
 
-    # Ответ  на вопрос 7.
+    # Ответ на вопрос 7.
     answer_7_locator = (By.ID, 'accordion__panel-6')
 
-    # Ответ  на вопрос 8.
+    # Ответ на вопрос 8.
     answer_8_locator = (By.ID, 'accordion__panel-7')
 
     # Список локаторов для ответов

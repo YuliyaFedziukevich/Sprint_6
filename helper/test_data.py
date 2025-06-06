@@ -1,4 +1,4 @@
-# Cуществующиe данныe для входа в аккаунт
+# Данныe для входа в аккаунт и для проверки сообщений
 
 from locators.ordering_scooter_locators import AboutRentLocators, OrderingScooterLocators
 
@@ -39,3 +39,6 @@ user_data_2 = UserData(
     rental_period_locator = about_rent_locators.rental_period_3_days_order,
     color_scooter_locator = about_rent_locators.grey_color_scooter_order,
     comment = 'Доставка желательна вечером')
+
+# Текст сообщения об успешном заказе самоката
+successful_message = 'Заказ оформлен'
