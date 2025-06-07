@@ -23,6 +23,10 @@ class BasePage:
     def text(self, locators):
         return self.find(locators).text
 
+    # Получить текст элемента, если он виден
+    def get_text_when_visible(self, locators):
+        return self.wait_visibility(locators).text
+
     # Дождаться, пока элемент будет кликабельным
     def wait_clickable(self, locators):
         return self.wait.until(expected_conditions.element_to_be_clickable(locators))
@@ -49,6 +53,7 @@ class BasePage:
     def switch_to_last_window(self):
         self.driver.switch_to.window(self.driver.window_handles[-1])
 
+    # Определение актуального адреса страницы
     def current_url(self):
         return self.driver.current_url
 

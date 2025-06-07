@@ -3,6 +3,10 @@ from selenium.webdriver import Keys
 from pages.base_page import BasePage
 from locators.ordering_scooter_locators import (MainScooterLocators, OrderingScooterLocators, AboutRentLocators,
                                                 OrderRegistrationLocators, OrderSuccessfullyPlacedLocators)
+from helper.test_data import user_data_1, user_data_2, successful_message
+from helper.url import main_url, dzen
+
+
 main_scooter_locators = MainScooterLocators()
 ordering_scooter_locators = OrderingScooterLocators()
 about_rent_locators = AboutRentLocators()
@@ -93,6 +97,11 @@ class OrderingScooter(BasePage):
         self.click(button_order_view)
 
 
+    @allure.step ('[Проверка, что заказ оформлен успешно (отображается окно "Заказ оформлен")')
+    def verify_successful_order_text(self):
+        return successful_message in self.get_text_when_visible(order_successfully_placed_locators.order_successfully_placed)
+
+
     @allure.step('Выбор варианта "Да" на странице "Хотите оформить заказ"')
     def select_yes_while_place_an_order(self):
 
@@ -100,9 +109,43 @@ class OrderingScooter(BasePage):
         self.wait_clickable_and_click(order_registration_locators.button_yes_order)
 
 
+    @allure.step('Нажать на логотип "Самоката"')
+    def click_logo_scooter(self):
+        self.click(ordering_scooter_locators.scooter_logo_order)
+
+
+    @allure.step('Нажать на логотип Яндекса')
+    def click_logo_yandex(self):
+        self.wait_clickable_and_click(main_scooter_locators.yandex_logo_order)
+
+
+    @allure.step('Выбор объекта 1 с данными для заполнения полей заказа самоката')
+    def filling_order_fields_1(self):
+        self.filling_order_fields(user_data_1)
+
+
+    @allure.step('Выбор объекта 2 с данными для заполнения полей заказа самоката')
+    def filling_order_fields_2(self):
+        self.filling_order_fields(user_data_2)
+
 
     @allure.step('Шаг по заполнению полей на страницах "Для кого самокат", "Про аренду", "Хотите оформить заказ"')
     def filling_order_fields(self, user_data):
         self.filling_order_fields_who_is_scooter_for(user_data)
         self.filling_order_fields_about_rent(user_data)
         self.select_yes_while_place_an_order()
+
+
+    @allure.step('Дождаться, пока в адресной строке появится адрес Дзена')
+    def wait_url_contains_dzen(self):
+        return self.wait_url_contains(dzen)
+
+
+    @allure.step('Проверка, что адрес открывшейся страницы - главная страница')
+    def verify_main_url(self):
+        return self.current_url() == main_url
+
+
+    @allure.step('Проверка, что адрес открывшейся страницы - главная страница Дзена')
+    def verify_dzen_url(self):
+        return self.current_url() == dzen
